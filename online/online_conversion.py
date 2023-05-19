@@ -22,6 +22,7 @@ def create_conversion_section(total_coverage: int, total_conversion: int):
               value=40, step=5, format='%d%%', key=f"drug_to_specialist")
 
     st.slider(label='Покупка (% от записи к врачу)', min_value=0, max_value=100,
-              value=20, step=5, format='%d%%', key=f"drug_to_buy")
+              value=20, step=5, format='%d%%', key=f"drug_to_buy",
+              help='Отгрузка - 3500, COGS - 1500')
 
 
