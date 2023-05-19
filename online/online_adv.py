@@ -3,39 +3,39 @@ import streamlit as st
 online_source = {
     'Yandex': {
         'monthly_cost': 100_000,
-        'audience_coverage': 10_000,
+        'audience_coverage': 50_000,
         'conversion': 10,
         'fullname': '',
         'fullname_rus': 'Yandex',
         'shortname': 'yandex',
     },
     'VK': {
-        'monthly_cost': 100_000,
-        'audience_coverage': 10_000,
+        'monthly_cost': 0,
+        'audience_coverage': 0,
         'conversion': 10,
         'fullname': '',
         'fullname_rus': 'Вконтакте',
         'shortname': 'vk',
     },
     'OK': {
-        'monthly_cost': 100_000,
-        'audience_coverage': 10_000,
+        'monthly_cost': 0,
+        'audience_coverage': 0,
         'conversion': 10,
         'fullname': '',
         'fullname_rus': 'Одноклассники',
         'shortname': 'ok',
     },
     'Instagram': {
-        'monthly_cost': 100_000,
-        'audience_coverage': 10_000,
+        'monthly_cost': 0,
+        'audience_coverage': 0,
         'conversion': 10,
         'fullname': '',
         'fullname_rus': 'Инстаграмм (экстремистская орг.)',
         'shortname': 'insta',
     },
     'Youtube': {
-        'monthly_cost': 100_000,
-        'audience_coverage': 10_000,
+        'monthly_cost': 0,
+        'audience_coverage': 0,
         'conversion': 10,
         'fullname': '',
         'fullname_rus': 'Youtube',
@@ -45,7 +45,7 @@ online_source = {
 
 
 def create_online_source_card(card: dict):
-    with st.expander(card['fullname_rus']):
+    with st.expander(card['fullname_rus'], expanded=True):
         with st.container():
             col1, col2 = st.columns(2)
             with col1:
@@ -71,7 +71,7 @@ def create_online_source_section():
     with st.expander(label='Выберите площадку', expanded=False):
         st.multiselect(label='Выбрано',
                        options=(i for i in online_source),
-                       default=(i for i in online_source if i not in ('Youtube', 'Instagram')),
+                       default=(i for i in online_source if i == 'Yandex'),
                        key='chosen_online_source')
     for num, i in enumerate(st.session_state.chosen_online_source):
         create_online_source_card(online_source[i])

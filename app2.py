@@ -26,24 +26,28 @@ with st.container():
     with col3:
         create_conversion_section(total_coverage, total_conversion)
 
-final_salary = []
+final_salary, final_bonus = [], []
 for i in st.session_state.chosen_fte:
-    salary = online_salary_condition[i]['salary']
     shortname = online_salary_condition[i]['shortname']
     tax_chosen = st.session_state[f'{shortname}_tax_type']
     tax = tax_condition[tax_chosen]
-    gross = salary / (1 - tax / 100)
-    final_salary.append(gross)
 
+    salary = st.session_state[f'{shortname}_salary_gross']
+    bonus = st.session_state[f'{shortname}_bonus']
+
+    gross_salary = salary / (1 - tax / 100)
+    gross_bonus = gross_salary * bonus / 100 * (1 - tax / 100)
+
+    final_salary.append(gross_salary)
+    final_bonus.append(gross_bonus)
 salary = int(sum(final_salary)/1_000)
-
+bonus = int(sum(final_bonus)/1_000)
 
 final_adv = []
 for i in st.session_state.chosen_online_source:
     shortname = online_source[i]['shortname']
     gross = st.session_state[f'{shortname}_online_monthly_cost']
     final_adv.append(gross)
-
 adv_gross = int(sum(final_adv)/1_000)
 
 packs = total_conversion * \
@@ -54,25 +58,25 @@ packs = total_conversion * \
 st.header(f"Всего упаковок: {int(packs)}")
 revenue = int((packs * 3_500)/1_000)
 COGS = int(packs * 1_500 / 1_000)
-profit = revenue - COGS - salary - adv_gross
+profit = revenue - COGS - salary - bonus - adv_gross
 
 fig = go.Figure(go.Waterfall(
             name="20", orientation="v",
             measure=["absolute",
-                     "relative", "relative", "relative",
+                     "relative", "relative", "relative", 'relative',
                      # "total",
                      ],
             x=['revenue',
-               'COGS', 'salary', 'adv_gross'
+               'COGS', 'salary', 'bonus', 'adv_gross'
                # 'profit'
                ],
             textposition="outside",
             text=[revenue,
-                  -COGS, -salary, -adv_gross,
+                  -COGS, -salary, -bonus, -adv_gross,
                   # profit
                   ],
             y=[revenue,
-               -COGS, -salary, -adv_gross,
+               -COGS, -salary, -bonus, -adv_gross,
                # profit
                ],
             connector={"line": {"color": "rgb(63, 63, 63)"}},
